@@ -48,6 +48,9 @@ room["treasure"].s_to = room["narrow"]
 # Make a new player object that is currently in the "outside" room.
 player = Player("player1", room["outside"])
 
+# Log list for a given REPL loop
+replLog = []
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -59,11 +62,24 @@ player = Player("player1", room["outside"])
 #
 # If the user enters "q", quit the game.
 while True:
-    # Print current player location
-    print("Location:")
-    print(f"-- {player.current_room.name}")
-    print(f"{textwrap.fill(player.current_room.description, 40)}")
+    # Clear terminal
+    # -> reduces terminal pollution
+    clear()
 
+    # Print current player location
+    for log in replLog:
+        print(f"> {log}")
+
+    # Reset log array
+    replLog = []
+
+    # Print Player's current location
+    print("\nLocation:")
+    print(f"-- {player.current_room.name}")
+    print(f"{textwrap.fill(player.current_room.description, 50)}")
+
+    # Ask user where to go
+    # (accepts a cardinal direction)
     choice = input("\nWhere do you want to go? (#): ")
     print()
 
@@ -78,11 +94,14 @@ while True:
             if hasattr(player.current_room, f"{choice}_to"):
                 # Move player into room
                 player.current_room = getattr(player.current_room, f"{choice}_to")
+                replLog.append(f"Entered room: {player.current_room.name}")
+
+            else:
+                # Room does not exist
+                replLog.append("Room does not exist!")
 
         else:
-            print("Not a valid cardinal direction")
+            replLog.append("Not a valid cardinal direction!")
 
-    except ValueError:
-        print("Please enter a valid number");
-
-    print("\n")
+    except:
+        replLog.append("Somthing went wrong! :(")
