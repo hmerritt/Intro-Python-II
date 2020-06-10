@@ -51,6 +51,14 @@ player = Player("player1", room["outside"])
 # Log list for a given REPL loop
 replLog = []
 
+# Dict to get full cardinal direction
+direction = {
+    "n": "north",
+    "s": "south",
+    "e": "east",
+    "w": "west",
+}
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -90,15 +98,17 @@ while True:
         # Validate user input
         # -> accept cardinal direction
         if choice in ["n", "e", "s", "w"]:
+            replLog.append(f"Going {direction[choice]}")
+
             # Check if room exists
             if hasattr(player.current_room, f"{choice}_to"):
                 # Move player into room
                 player.current_room = getattr(player.current_room, f"{choice}_to")
-                replLog.append(f"Entered room: {player.current_room.name}")
+                replLog.append(f"Found room: {player.current_room.name}")
 
             else:
                 # Room does not exist
-                replLog.append("Room does not exist!")
+                replLog.append(f"No room found to the {direction[choice]}")
 
         else:
             replLog.append("Not a valid cardinal direction!")
