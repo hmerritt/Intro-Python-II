@@ -2,31 +2,44 @@ import os
 import textwrap
 
 from room import Room
+from item import Item
 from player import Player
 
 # Clear console
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-# Declare all the rooms
+# Declare all the rooms + items
+
+items = {
+    "gold": Item("Gold", "10g of solid gold"),
+    "dust": Item("Dust", "Worthless piece dust"),
+    "mineral": Item("Mineral", "Rare mineral"),
+    "gun": Item("Gun", "An old rifle"),
+}
 
 room = {
     "outside":  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons",
+                     [items["dust"]]),
 
     "foyer":    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""",
+                    [items["dust"], items["mineral"]]),
 
     "overlook": Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""",
+                    [items["gun"]]),
 
     "narrow":   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air.""",
+                    [items["dust"], items["mineral"]]),
 
     "treasure": Room("Treasure Chamber", """You"ve found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south.""",
+                    [items["gold"]]),
 }
 
 
@@ -85,6 +98,11 @@ while True:
     print("\nLocation:")
     print(f"-- {player.current_room.name}")
     print(f"{textwrap.fill(player.current_room.description, 50)}")
+
+    # Print room items
+    print("\nRoom Items:")
+    for i in player.current_room.items:
+        print(f"-> {i.name} ({i.description})")
 
     # Ask user where to go
     # (accepts a cardinal direction)
