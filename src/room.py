@@ -16,6 +16,9 @@ class Room:
 
         return doesExist
 
+    def addItem(self, item):
+        self.items.append(item)
+
     def removeItem(self, item):
         itemRemoved = False
 

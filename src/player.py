@@ -9,7 +9,7 @@ class Player:
     def itemExists(self, item):
         doesExist = False
 
-        for invItem in self.items:
+        for invItem in self.inventory:
             if item.lower() == invItem.name.lower():
                 doesExist = True
                 break
@@ -24,7 +24,7 @@ class Player:
 
         for invItemIndex, invItem in enumerate(self.inventory):
             if item.lower() == invItem.name.lower():
-                del self.items[invItemIndex]
+                del self.inventory[invItemIndex]
                 itemRemoved = True
                 break
 

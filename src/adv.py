@@ -165,9 +165,20 @@ while True:
                 else:
                     replLog.append(f"Item, {choices[1]}, could not be found!")
 
-            # # Drop an item in player's
-            # # inventory
-            # elif choices[0].lower() == "drop":
+            # Drop an item in player's
+            # inventory
+            elif choices[0].lower() == "drop":
+                # Check if player has item
+                if player.itemExists(choices[1]):
+                    # Remove item from inventory
+                    player.removeFromInventory(choices[1])
+
+                    # Add item to current room
+                    player.current_room.addItem(items[choices[1].lower()])
+
+                    replLog.append(f"Dropped item -> {choices[1]}")
+                else:
+                    replLog.append(f"Item, {choices[1]}, is not in inventory!")
 
             else:
                 replLog.append("Not a valid command!")
