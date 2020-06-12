@@ -129,9 +129,15 @@ while True:
         if choice == "q":
             break
 
+        # Print player's inventory
+        if choices[0] == "inventory" or choices[0] == "i":
+            replLog.append(f"Inventory:")
+            for item in player.inventory:
+                replLog.append(f"-> {item.name}")
+
         # Validate user input
         # -> accept cardinal direction
-        if len(choices) == 1:
+        elif len(choices) == 1:
             if choice in ["n", "e", "s", "w"]:
                 replLog.append(f"Going {direction[choice]}")
 
@@ -148,13 +154,17 @@ while True:
                 replLog.append("Not a cardinal direction!")
 
         else:
+            # Convert inputs to lowercase
+            choices[0] = choices[0].lower()
+            choices[1] = choices[1].lower()
+
             # Pick an item up
             # in current room
-            if choices[0].lower() == "get" or choices[0].lower() == "take":
+            if choices[0] == "get" or choices[0] == "take":
                 # Check if item exists in current room
                 if player.current_room.itemExists(choices[1]):
                     # Add item to inventory
-                    player.addToInventory(items[choices[1].lower()])
+                    player.addToInventory(items[choices[1]])
 
                     # Remove item from room
                     player.current_room.removeItem(choices[1])
@@ -167,14 +177,14 @@ while True:
 
             # Drop an item in player's
             # inventory
-            elif choices[0].lower() == "drop":
+            elif choices[0] == "drop":
                 # Check if player has item
                 if player.itemExists(choices[1]):
                     # Remove item from inventory
                     player.removeFromInventory(choices[1])
 
                     # Add item to current room
-                    player.current_room.addItem(items[choices[1].lower()])
+                    player.current_room.addItem(items[choices[1]])
 
                     replLog.append(f"Dropped item -> {choices[1]}")
                 else:
