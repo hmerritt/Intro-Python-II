@@ -5,3 +5,24 @@ class Room:
         self.name = name
         self.description = description
         self.items = items
+
+    def itemExists(self, item):
+        doesExist = False
+
+        for roomItem in self.items:
+            if item.lower() == roomItem.name.lower():
+                doesExist = True
+                break
+
+        return doesExist
+
+    def removeItem(self, item):
+        itemRemoved = False
+
+        for roomItemIndex, roomItem in enumerate(self.items):
+            if item.lower() == roomItem.name.lower():
+                del self.items[roomItemIndex]
+                itemRemoved = True
+                break
+
+        return itemRemoved

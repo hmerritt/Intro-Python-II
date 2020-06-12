@@ -13,7 +13,7 @@ def clear():
 
 items = {
     "gold": Item("Gold", "10g of solid gold"),
-    "dust": Item("Dust", "Worthless piece dust"),
+    "dust": Item("Dust", "Worthless piece of dust"),
     "mineral": Item("Mineral", "Rare mineral"),
     "gun": Item("Gun", "An old rifle"),
 }
@@ -72,6 +72,18 @@ direction = {
     "w": "west",
 }
 
+# Check if an item exists
+# in a specifc room
+# def itemExistsInRoom(item, room):
+#     doesExist = False
+#
+#     for roomItem in room.items:
+#         if item.lower() == roomItem.name.lower():
+#             doesExist = True
+#             break
+#
+#     return doesExist
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -109,27 +121,56 @@ while True:
     choice = input("\nWhere do you want to go? (#): ")
     print()
 
+    # Split each word entered into a
+    # different value within an array
+    choices = choice.split(" ")
+
     try:
         if choice == "q":
             break
 
         # Validate user input
         # -> accept cardinal direction
-        if choice in ["n", "e", "s", "w"]:
-            replLog.append(f"Going {direction[choice]}")
+        if len(choices) == 1:
+            if choice in ["n", "e", "s", "w"]:
+                replLog.append(f"Going {direction[choice]}")
 
-            # Check if room exists
-            if hasattr(player.current_room, f"{choice}_to"):
-                # Move player into room
-                player.current_room = getattr(player.current_room, f"{choice}_to")
-                replLog.append(f"Found room: {player.current_room.name}")
+                # Check if room exists
+                if hasattr(player.current_room, f"{choice}_to"):
+                    # Move player into room
+                    player.current_room = getattr(player.current_room, f"{choice}_to")
+                    replLog.append(f"Found room: {player.current_room.name}")
 
+                else:
+                    # Room does not exist
+                    replLog.append(f"No room found to the {direction[choice]}")
             else:
-                # Room does not exist
-                replLog.append(f"No room found to the {direction[choice]}")
+                replLog.append("Not a cardinal direction!")
 
         else:
-            replLog.append("Not a valid cardinal direction!")
+            # Pick an item up
+            # in current room
+            if choices[0].lower() == "get" or choices[0].lower() == "take":
+                # Check if item exists in current room
+                if player.current_room.itemExists(choices[1]):
+                    # Add item to inventory
+                    player.addToInventory(items[choices[1].lower()])
+
+                    # Remove item from room
+                    player.current_room.removeItem(choices[1])
+
+                    replLog.append(f"Picked up item -> {choices[1]}")
+
+                # Item does not exist
+                else:
+                    replLog.append(f"Item, {choices[1]}, could not be found!")
+
+            # # Drop an item in player's
+            # # inventory
+            # elif choices[0].lower() == "drop":
+
+            else:
+                replLog.append("Not a valid command!")
 
     except:
         replLog.append("Somthing went wrong! :(")

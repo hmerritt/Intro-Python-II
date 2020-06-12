@@ -5,3 +5,27 @@ class Player:
         self.name = name
         self.current_room = current_room
         self.inventory = inventory
+
+    def itemExists(self, item):
+        doesExist = False
+
+        for invItem in self.items:
+            if item.lower() == invItem.name.lower():
+                doesExist = True
+                break
+
+        return doesExist
+
+    def addToInventory(self, item):
+        self.inventory.append(item)
+
+    def removeFromInventory(self, item):
+        itemRemoved = False
+
+        for invItemIndex, invItem in enumerate(self.inventory):
+            if item.lower() == invItem.name.lower():
+                del self.items[invItemIndex]
+                itemRemoved = True
+                break
+
+        return itemRemoved
